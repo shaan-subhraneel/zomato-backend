@@ -73,12 +73,12 @@ app.post('/login',(req,res) => {
 
 //userinfo
 app.get('/userInfo',(req,res) => {
-  let token = req.headers['x-access-stoken'];
+  let token = req.headers['x-access-token'];
   if(!token) res.send({auth:false,token:'No Token Provided'})
   // jwt verify token
   jwt.verify(token,config.secret,(err,user) => {
       if(err) return res.send({auth:false,token:'Invalid Token'})
-      db.collection('users').findOne({"_id:": user.id}, (err,result) => {
+      db.collection('users').findOne(user.id,(err,result) => {
           res.send(result)
       })
   })
