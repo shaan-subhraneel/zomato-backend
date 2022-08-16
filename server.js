@@ -34,55 +34,7 @@ app.get('/',(req,res) => {
     res.send('Express Server default')
 })
 
-app.get('/users',(req,res) => {
-  db.collection('users').find().toArray((err,result) => {
-      if(err) throw err;
-      res.send(result)
-    })
-})
 
-//register User
-app.post('/register', (req,res) => {
-  const hashPassword =  bcrypt.hashSync(req.body.password, 8)
-  db.collection('users').insertOne({
-      name:req.body.name,
-      email:req.body.email,
-      password:hashPassword,
-      phone:req.body.phone,
-      role:req.body.role?req.body.role:'User'
-  },(err,data) => {
-      if(err) return res.status(500).send('Error While Register');
-      res.status(200).send('Registeration Succesful')
-  })
-})
-
-///login Users
-app.post('/login',(req,res) => {
-  db.collection('users').findOne({email:req.body.email},(err,user) => {
-      if(err) return res.send({auth:false,token:'Error While Login'})
-      if(!user) return res.send({auth:false,token:'No User Found Register First'})
-      else{
-          const passIsValid = bcrypt.compareSync(req.body.password,user.password)
-          if(!passIsValid) return res.send({auth:false,token:'Invalid Password'})
-          // in case email and password both good than generate token
-          let token = jwt.sign({id:user._id},config.secret,{expiresIn:86400}) // 24 hours
-          return res.send({auth:true,token:token})
-      }
-  })
-})
-
-//userinfo
-app.get('/userInfo',(req,res) => {
-  let token = req.headers['x-access-token'];
-  if(!token) res.send({auth:false,token:'No Token Provided'})
-  // jwt verify token
-  jwt.verify(token,config.secret,(err,user) => {
-      if(err) return res.send({auth:false,token:'Invalid Token'})
-      db.collection('users').findById(user.id,(err,result) => {
-          res.send(result)
-      })
-  })
-})
 
 app.get('/items/:collections',(req,res) => {
   db.collection(req.params.collections).find().toArray((err,result) => {
