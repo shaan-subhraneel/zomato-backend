@@ -77,8 +77,9 @@ app.get('/userInfo',(req,res) => {
   if(!token) res.send({auth:false,token:'No Token Provided'})
   // jwt verify token
   jwt.verify(token,config.secret,(err,user) => {
+    var o_id = new BSON.ObjectID(user.id);
       if(err) return res.send({auth:false,token:'Invalid Token'})
-      db.collection('users').findOne(user.id,(err,result) => {
+      db.collection('users').findOne({id:o_id},(err,result) => {
         res.send(result)
     })
 
