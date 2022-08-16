@@ -12,9 +12,9 @@ let mongo = require('mongodb');
 let mongoClient = mongo.MongoClient;
 let mongoUrl = process.env.MongoLiveUrl;
 let db;
-const jwt = require('jsonwebtoken');
+let jwt = require('jsonwebtoken');
 let bcrypt = require('bcrypt');
-const config = require('./config');
+let config = require('./config');
 
 //Connection with db
 mongoClient.connect(mongoUrl,(err,client) => {
