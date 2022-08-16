@@ -15,6 +15,7 @@ let db;
 let jwt = require('jsonwebtoken');
 let bcrypt = require('bcrypt');
 let config = require('./config');
+let BSON = require('bson');
 
 //Connection with db
 mongoClient.connect(mongoUrl,(err,client) => {
