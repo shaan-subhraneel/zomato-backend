@@ -78,7 +78,7 @@ app.get('/userInfo',(req,res) => {
   // jwt verify token
   jwt.verify(token,config.secret,(err,user) => {
       if(err) return res.send({auth:false,token:'Invalid Token'})
-      db.collection('users').findOne({"_id":"62fb200359e6e8bd793dcaae"},(err,result) => {
+      db.collection('users').findOne({"_id":mongo.ObjectId("62fb200359e6e8bd793dcaae")},(err,result) => {
         res.send(result)
     })
 
