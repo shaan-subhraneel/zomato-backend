@@ -79,7 +79,7 @@ app.get('/userInfo',(req,res) => {
   jwt.verify(token,config.secret,(err,user) => {
       if(err) return res.send({auth:false,token:'Invalid Token'})
       db.collection('users').findOne({_id:user.id},(err,result) => {
-          return res.send({name:user.name,email:user.email,phone:user.phone,role:user.role})
+          return res.send(user.id)
       })
   })
 })
