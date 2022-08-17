@@ -107,20 +107,16 @@ app.get('/mealType',(req,res) => {
 })
 
 app.get('/restaurants',(req,res) => {
-  let stateId = Number(req.query.stateId)
-  let mealId = Number(req.query.mealId)
-  let query = {}
-  if(stateId && mealId){
-    query = {state_id:stateId,'mealTypes.mealtype_id':mealId}
+  var query = {}
+  if(req.query.stateId){
+      query={state_id:Number(req.query.stateId)}
+      console.log(query)
+  }else if(req.query.mealtype_id){
+      query={"mealTypes.mealtype_id":Number(req.query.mealtype_id)}
   }
-  else if(stateId){
-    query = {state_id:stateId}
-  }else if(mealId){
-    query = {'mealTypes.mealtype_id':mealId}
-  }
-  db.collection('restaurants').find(query).toArray((err,result) => {
-    if(err) throw err;
-    res.send(result)
+  db.collection('restaurants').find(query).toArray((err,result)=>{
+      if(err) throw err;
+      res.send(result)
   })
 })
 
